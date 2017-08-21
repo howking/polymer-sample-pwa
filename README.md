@@ -1,1 +1,3 @@
-# polymer-sample-pwa
+# Polymer Sample PWA
+
+Polymer サンプルコード PWA
