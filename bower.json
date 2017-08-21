@@ -1,5 +1,5 @@
 {
-  "name": "polymer-pwa-sample-1",
+  "name": "polymer-sample-pwa-1",
   "dependencies": {
     "polymer": "Polymer/polymer",
     "webcomponentsjs": "webcomponents/webcomponentsjs",
