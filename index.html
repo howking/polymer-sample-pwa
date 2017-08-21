@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Polymer Sample PWA</title>
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#29549a">
+    <script src="/bower_components/webcomponentsjs/webcomponents-loader.js"></script>
+    <link rel="import" href="/my-view.html" async>
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+          navigator.serviceWorker.register('/service-worker.js');
+        });
+      }
+    </script>
+  </head>
+  <body>
+    <my-view key="view1" pages='[["view1","Page 1"], ["view2","Page 2"], ["view3","Page 3"]]'>
+      <svg viewBox="0 0 24 30" fill="#eee" width="128"
+           style="position: absolute; top: 0px; right: 0px; bottom: 0px; left: 0px; margin: auto;">
+        <path d="M19 4h-4L7.11 16.63 4.5 12 9 4H5L.5 12 5 20h4l7.89-12.63L19.5 12 15 20h4l4.5-8z"/>
+      </svg>
+      <noscript>Polymer Sample PWA</noscript>
+    </my-view>
+  </body>
+</html>

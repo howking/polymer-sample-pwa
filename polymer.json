@@ -1,0 +1,15 @@
+{
+  "entrypoint": "index.html",
+  "shell": "my-view.html",
+  "extraDependencies": [
+    "manifest.json",
+    "bower_components/webcomponentsjs/*.js"
+  ],
+  "sources": [
+    "pages/**/*.md"
+  ],
+  "builds": [{
+    "name": "default",
+    "preset": "es5-bundled"
+  }]
+}

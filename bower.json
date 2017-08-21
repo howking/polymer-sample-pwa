@@ -1,0 +1,11 @@
+{
+  "name": "polymer-pwa-sample-1",
+  "dependencies": {
+    "polymer": "Polymer/polymer",
+    "webcomponentsjs": "webcomponents/webcomponentsjs",
+    "app-layout": "PolymerElements/app-layout",
+    "iron-icons": "PolymerElements/iron-icons",
+    "paper-ui-elements": "PolymerElements/paper-ui-elements",
+    "marked-element": "PolymerElements/marked-element"
+  }
+}

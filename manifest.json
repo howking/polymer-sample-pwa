@@ -1,0 +1,17 @@
+{
+  "name": "Polymer Sample PWA",
+  "short_name": "Polymer Smpl",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#fff",
+  "theme_color": "#29549a",
+  "icons": [{
+    "src": "https://www.polymer-project.org/images/logos/p-logo-192.png",
+    "sizes": "192x192",
+    "type": "image/png"
+  },{
+    "src": "https://www.polymer-project.org/images/logos/p-logo-512.png",
+    "sizes": "512x512",
+    "type": "image/png"
+  }]
+}
