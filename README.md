@@ -1,6 +1,6 @@
 # Polymer Sample (4) PWA [1]
 
-[Polymer サンプルコード (4) PWA [1]](http://qiita.com/howking/items/c4f54c4d8175b8229020)のソースコードです。
+[Polymer サンプルコード (4) PWA [1]](http://qiita.com/howking/items/27fec1598558045b74d1)のソースコードです。
 
 ## セットアップ
 ```
