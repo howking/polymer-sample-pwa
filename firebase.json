@@ -1,5 +1,9 @@
 {
   "hosting": {
-    "public": "build/default"
+    "public": "build/default",
+    "rewrites": [{
+      "source": "!/__/**",
+      "destination": "/index.html"
+    }]
   }
 }

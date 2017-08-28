@@ -1,12 +1,17 @@
 {
   "entrypoint": "index.html",
-  "shell": "my-view.html",
+  "shell": "src/my-view.html",
+  "fragments": [
+    "src/my-icons.html",
+    "src/my-marked.html",
+    "src/my-fire.html"
+  ],
   "extraDependencies": [
     "manifest.json",
     "bower_components/webcomponentsjs/*.js"
   ],
   "sources": [
-    "pages/**/*.md"
+    "src/**/*.html"
   ],
   "builds": [{
     "name": "default",

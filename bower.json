@@ -1,11 +1,15 @@
 {
-  "name": "polymer-sample-pwa-1",
+  "name": "polymer-sample-pwa-2",
   "dependencies": {
     "polymer": "Polymer/polymer",
     "webcomponentsjs": "webcomponents/webcomponentsjs",
+    "app-route": "PolymerElements/app-route",
     "app-layout": "PolymerElements/app-layout",
-    "iron-icons": "PolymerElements/iron-icons",
     "paper-ui-elements": "PolymerElements/paper-ui-elements",
-    "marked-element": "PolymerElements/marked-element"
+    "paper-toggle-button": "PolymerElements/paper-toggle-button",
+    "marked-element": "PolymerElements/marked-element",
+    "prism-element": "PolymerElements/prism-element",
+    "sanitize-element": "howking/sanitize-element",
+    "polymerfire": "firebase/polymerfire"
   }
 }

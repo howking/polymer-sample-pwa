@@ -1,0 +1,62 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/polymer/lib/elements/dom-if.html">
+<link rel="import" href="../bower_components/marked-element/marked-element.html">
+<link rel="import" href="../bower_components/prism-element/prism-highlighter.html">
+<link rel="import" href="../bower_components/sanitize-element/sanitize-element.html">
+<link rel="import" href="../bower_components/polymerfire/firebase-auth.html">
+<link rel="import" href="../bower_components/paper-toggle-button/paper-toggle-button.html">
+<link rel="import" href="../bower_components/paper-input/paper-textarea.html">
+
+<link rel="import" href="https://poly-style.appspot.com?id=github-markdown-styles&url=https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.8.0/github-markdown.min.css">
+<link rel="import" href="../bower_components/prism-element/prism-theme-default.html">
+
+<dom-module id="my-marked">
+  <template>
+    <style include="github-markdown-styles prism-theme-default">
+      :host {
+        display: block;
+        --paper-input-container: {
+          width: 100%;
+        }
+      }
+      marked-element {
+        margin: 10px 15px;
+      }
+    </style>
+    
+    <sanitize-element config='{
+                              "elements": ["my-home","img"],
+                              "attributes":{"img":["class","src"]},
+                              "protocols":{"img":{"src":["https"]}}
+                              }' sanitizer="{{_sanitizer}}"></sanitize-element>
+
+    <prism-highlighter></prism-highlighter>
+    
+    <marked-element sanitize sanitizer="[[_sanitizer]]" markdown="[[contents]]">
+      <main class="markdown-body" slot="markdown-html"></main>
+    </marked-element>
+    
+    <template is="dom-if" if="[[contents]]">
+      <template is="dom-if" if="[[login]]">
+        <paper-toggle-button checked="{{_edit}}"></paper-toggle-button>
+        <paper-textarea value="{{contents}}" hidden="[[!_edit]]"></paper-textarea>
+      </template>
+    </template>
+      
+  </template>
+  <script>
+    class MyMarked extends Polymer.Element {
+      static get is() { return 'my-marked' }
+      static get properties() {
+        return {
+          login: Boolean,
+          contents: {
+            type: String,
+            notify: true
+          }
+        }
+      }
+    }
+    customElements.define(MyMarked.is, MyMarked)
+  </script>
+</dom-module>

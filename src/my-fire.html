@@ -1,0 +1,58 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/polymer/lib/elements/dom-if.html">
+<link rel="import" href="../bower_components/polymerfire/firebase-app.html">
+<link rel="import" href="../bower_components/polymerfire/firebase-query.html">
+<link rel="import" href="../bower_components/polymerfire/firebase-document.html">
+<link rel="import" href="../bower_components/polymerfire/firebase-auth.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+
+<dom-module id="my-fire">
+  <template>
+    <style>
+      paper-icon-button {
+        --paper-icon-button-ink-color: white;
+      }
+    </style>
+    
+    <firebase-app
+      api-key="AIzaSyAXoRzCFBT2eGSZCKnl5Rspz7Cg-cUvtU8"
+      auth-domain="sample-2-8952f.firebaseapp.com"
+      database-url="https://sample-2-8952f.firebaseio.com"></firebase-app>
+    <firebase-query path="/data" data="{{pages}}"></firebase-query>
+    <firebase-document path="/data/[[key]]" data="{{view}}"></firebase-document>
+    <firebase-auth signed-in="{{login}}" provider="google"></firebase-auth>
+
+    <paper-icon-button icon="my:[[_icon(login)]]" on-tap="_auth"></paper-icon-button>
+    
+  </template>
+  <script>
+    class MyFire extends Polymer.Element {
+      static get is() { return 'my-fire' }
+      static get properties() {
+        return {
+          key: {
+            type: String
+          },
+          pages: {
+            type: Array,
+            notify: true
+          },
+          view: {
+            type: Object,
+            notify: true
+          },
+          login: {
+            type: Boolean,
+            notify: true
+          }
+        }
+      }
+      _icon(login){ return login ? 'logout' : 'google' }
+      _auth(){
+        const auth = this.shadowRoot.querySelector('firebase-auth')
+        auth.signedIn ? auth.signOut() : auth.signInWithRedirect()
+      }
+    }
+    customElements.define(MyFire.is, MyFire)
+  </script>
+</dom-module>
