@@ -1,12 +1,10 @@
-# Polymer Sample (4) PWA [1]
+# Polymer Sample (4) PWA [2]
 
-[Polymer サンプルコード (4) PWA [1]](http://qiita.com/howking/items/27fec1598558045b74d1)のソースコードです。
+[Polymer サンプルコード (5) PWA [2]]()のソースコードです。
 
 ## セットアップ
 ```
-npm install -g bower
-npm install -g polymer-cli
-npm install -g firebase-tools
+npm install -g bower polymer-cli firebase-tools
 ```
 
 ## インストールと実行
