@@ -6,15 +6,6 @@
     <title>Polymer Sample PWA</title>
     <link rel="manifest" href="/manifest.json">
     <meta name="theme-color" content="#29549a">
-    <script src="/bower_components/webcomponentsjs/webcomponents-loader.js"></script>
-    <link rel="import" href="/src/my-view.html" async>
-    <script>
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', function() {
-          navigator.serviceWorker.register('/service-worker.js');
-        });
-      }
-    </script>
   </head>
   <body>
     <my-view>
@@ -24,5 +15,14 @@
       </svg>
       <noscript>Polymer Sample PWA</noscript>
     </my-view>
+    <script src="/bower_components/webcomponentsjs/webcomponents-loader.js"></script>
+    <link rel="import" href="/src/my-view.html">
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+          navigator.serviceWorker.register('/service-worker.js');
+        });
+      }
+    </script>
   </body>
 </html>

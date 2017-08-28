@@ -3,7 +3,6 @@
 <link rel="import" href="../bower_components/marked-element/marked-element.html">
 <link rel="import" href="../bower_components/prism-element/prism-highlighter.html">
 <link rel="import" href="../bower_components/sanitize-element/sanitize-element.html">
-<link rel="import" href="../bower_components/polymerfire/firebase-auth.html">
 <link rel="import" href="../bower_components/paper-toggle-button/paper-toggle-button.html">
 <link rel="import" href="../bower_components/paper-input/paper-textarea.html">
 
@@ -15,12 +14,13 @@
     <style include="github-markdown-styles prism-theme-default">
       :host {
         display: block;
+        margin: 10px 15px;
         --paper-input-container: {
           width: 100%;
         }
       }
-      marked-element {
-        margin: 10px 15px;
+      paper-toggle-button {
+        margin-top: 15px;
       }
     </style>
     
