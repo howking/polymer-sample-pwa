@@ -2,9 +2,8 @@
   "entrypoint": "index.html",
   "shell": "src/my-view.html",
   "fragments": [
-    "src/my-icons.html",
-    "src/my-marked.html",
-    "src/my-fire.html"
+    "src/my-home.html",
+    "src/my-marked.html"
   ],
   "extraDependencies": [
     "manifest.json",
