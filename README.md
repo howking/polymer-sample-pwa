@@ -1,4 +1,4 @@
-# Polymer Sample (4) PWA [2]
+# Polymer Sample (5) PWA [2]
 
 [Polymer サンプルコード (5) PWA [2]]()のソースコードです。
 
@@ -12,7 +12,7 @@ npm install -g bower polymer-cli firebase-tools
 ```
 bower install
 polymer build
-perl -pi -e 's/ks\(this\);var lI=this.Hd;if\(lI\)for\(var uI=\[\],hI=1;/ks(this);var uI=[];var lI=this.Hd;if(lI)for(var hI=1;/' build/default/src/my-fire.html
+perl -pi -e 's/ks\(this\);var lI=this.Hd;if\(lI\)for\(var uI=\[\],hI=1;/ks(this);var uI=[];var lI=this.Hd;if(lI)for(var hI=1;/' build/default/src/my-view.html
 polymer serve
 ```
 
