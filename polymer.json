@@ -2,7 +2,6 @@
   "entrypoint": "index.html",
   "shell": "src/my-view.html",
   "fragments": [
-    "src/my-home.html",
     "src/my-marked.html"
   ],
   "extraDependencies": [
