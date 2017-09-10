@@ -6,6 +6,8 @@
 <link rel="import" href="../bower_components/sanitize-element/sanitize-element.html">
 <link rel="import" href="../bower_components/paper-toggle-button/paper-toggle-button.html">
 <link rel="import" href="../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="../bower_components/polymerfire/firebase-storage-ref.html">
+<link rel="import" href="../bower_components/polymerfire/firebase-storage-multiupload.html">
 
 <!-- https://poly-style.appspot.com?id=github-markdown-styles&url=https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.8.0/github-markdown.min.css -->
 <link rel="import" href="my-theme.html">
@@ -25,7 +27,15 @@
         margin-top: 15px;
       }
     </style>
+
+    <firebase-storage-ref
+      path="/files/p-logo.png"
+      download-url="{{downloadUrl}}"></firebase-storage-ref>
+    <img src="{{downloadUrl}}" style="width: 36px;">
     
+    <firebase-storage-multiupload id="fs" path='/files'></firebase-storage-multiupload>
+    <input id="fi" type="file" multiple on-change="_upload">
+
     <prism-highlighter></prism-highlighter>
 
     <sanitize-element
@@ -68,6 +78,9 @@
           inlineAttachment.editors.input.attachToInput(textarea,{uploadUrl:'imageUrl'})
           console.log('edit')
         }
+      }
+      _upload() {
+        this.shadowRoot.querySelector('#fs').upload(this.shadowRoot.querySelector('#fi').files)
       }
     }
     customElements.define(MyMarked.is, MyMarked)
