@@ -9,6 +9,7 @@
 
 <!-- https://poly-style.appspot.com?id=github-markdown-styles&url=https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.8.0/github-markdown.min.css -->
 <link rel="import" href="my-theme.html">
+<link rel="import" href="my-ia.html">
 
 <dom-module id="my-marked">
   <template>
@@ -40,7 +41,7 @@
     <template is="dom-if" if="[[contents]]">
       <template is="dom-if" if="[[login]]">
         <paper-toggle-button checked="{{_edit}}"></paper-toggle-button>
-        <paper-textarea value="{{contents}}" hidden="[[!_edit]]"></paper-textarea>
+        <paper-textarea value="{{contents}}" hidden="[[!_edit]]" on-click="editview"></paper-textarea>
       </template>
     </template>
       
@@ -55,6 +56,17 @@
             type: String,
             notify: true
           }
+        }
+      }
+      static get observers() {
+        return ['editview(_edit)']
+      }
+      editview(_edit){
+        if(_edit && ! this._initEdit){
+          this._initEdit = true
+          const textarea = this.shadowRoot.querySelector('paper-textarea')
+          inlineAttachment.editors.input.attachToInput(textarea,{uploadUrl:'imageUpload'})
+          console.log('edit')
         }
       }
     }

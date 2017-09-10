@@ -10,6 +10,7 @@
     "marked-element": "PolymerElements/marked-element",
     "prism-element": "PolymerElements/prism-element",
     "sanitize-element": "howking/sanitize-element",
-    "polymerfire": "firebase/polymerfire"
+    "polymerfire": "firebase/polymerfire",
+    "inline-attachment": "^2.0.3"
   }
 }
