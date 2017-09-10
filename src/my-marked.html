@@ -41,7 +41,7 @@
     <template is="dom-if" if="[[contents]]">
       <template is="dom-if" if="[[login]]">
         <paper-toggle-button checked="{{_edit}}"></paper-toggle-button>
-        <paper-textarea value="{{contents}}" hidden="[[!_edit]]" on-click="editview"></paper-textarea>
+        <paper-textarea value="{{contents}}" hidden="[[!_edit]]"></paper-textarea>
       </template>
     </template>
       
