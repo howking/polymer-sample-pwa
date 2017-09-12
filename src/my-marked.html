@@ -1,5 +1,6 @@
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../bower_components/polymer/lib/elements/dom-if.html">
+<link rel="import" href="../bower_components/polymer/lib/elements/dom-repeat.html">
 <link rel="import" href="../bower_components/marked-element/marked-element.html">
 <link rel="import" href="../bower_components/prism-element/prism-highlighter.html">
 <link rel="import" href="../bower_components/prism-element/prism-theme-default.html">
@@ -8,6 +9,7 @@
 <link rel="import" href="../bower_components/paper-input/paper-textarea.html">
 <link rel="import" href="../bower_components/polymerfire/firebase-storage-ref.html">
 <link rel="import" href="../bower_components/polymerfire/firebase-storage-multiupload.html">
+<link rel="import" href="../bower_components/polymerfire/firebase-storage-upload-task.html">
 
 <!-- https://poly-style.appspot.com?id=github-markdown-styles&url=https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.8.0/github-markdown.min.css -->
 <link rel="import" href="my-theme.html">
@@ -28,13 +30,28 @@
       }
     </style>
 
+    <!--
     <firebase-storage-ref
       path="/files/p-logo.png"
       download-url="{{downloadUrl}}"></firebase-storage-ref>
-    <img src="{{downloadUrl}}" style="width: 36px;">
-    
-    <firebase-storage-multiupload id="fs" path='/files'></firebase-storage-multiupload>
-    <input id="fi" type="file" multiple on-change="_upload">
+    -->
+
+    <firebase-storage-multiupload
+      id="fs"
+      path="/files"
+      upload-tasks="{{uploadTasks}}"
+      files="[[files]]"></firebase-storage-multiupload>
+    <template is="dom-repeat" items="[[uploadTasks]]">
+      <firebase-storage-upload-task
+        task="[[item]]""
+        bytes-transferred="{{item.bytesTransferred}}"
+        total-bytes="{{item.totalBytes}}"
+        state="{{item.state}}"
+        download-url="{{_downloadUrl}}"
+        metadata="{{item.metadata}}"
+        path="{{item.path}}"></firebase-storage-upload-task>
+      <img src="{{item.downloadUrl}}" style="width: 36px;">
+    </template>
 
     <prism-highlighter></prism-highlighter>
 
@@ -65,6 +82,15 @@
           contents: {
             type: String,
             notify: true
+          },
+          files: {
+            type: Array,
+            notify: true,
+            value: []
+          },
+          _downloadUrl:{
+            type: String,
+            observer: "_insertDownloadUrl"
           }
         }
       }
@@ -75,12 +101,32 @@
         if(_edit && ! this._initEdit){
           this._initEdit = true
           const textarea = this.shadowRoot.querySelector('paper-textarea')
-          inlineAttachment.editors.input.attachToInput(textarea,{uploadUrl:'imageUrl'})
+          //inlineAttachment.editors.input.attachToInput(textarea,{uploadUrl:'imageUrl'})
           console.log('edit')
+
+          textarea.addEventListener('drop', e=>{
+            e.stopPropagation()
+            e.preventDefault()
+            this._onDrop(e)
+          })
         }
       }
-      _upload() {
-        this.shadowRoot.querySelector('#fs').upload(this.shadowRoot.querySelector('#fi').files)
+      _onDrop(e){
+        this.shadowRoot.querySelector('#fs').upload(e.dataTransfer.files)
+      }
+      _upload(e) {
+        this.files = e.target.files;
+        console.log(this.files)
+      }
+      _insertDownloadUrl(text){
+        if(text){
+          text='![img]('+text+')'
+          const textarea = this.shadowRoot.querySelector('paper-textarea')
+          var strPos = textarea.shadowRoot.querySelector('iron-autogrow-textarea').selectionStart
+          var front = this.contents.substring(0, strPos)
+          var back = this.contents.substring(strPos, this.contents.length)
+          this.contents = front + text + back
+        }
       }
     }
     customElements.define(MyMarked.is, MyMarked)
