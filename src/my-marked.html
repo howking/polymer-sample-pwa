@@ -7,13 +7,11 @@
 <link rel="import" href="../bower_components/sanitize-element/sanitize-element.html">
 <link rel="import" href="../bower_components/paper-toggle-button/paper-toggle-button.html">
 <link rel="import" href="../bower_components/paper-input/paper-textarea.html">
-<link rel="import" href="../bower_components/polymerfire/firebase-storage-ref.html">
 <link rel="import" href="../bower_components/polymerfire/firebase-storage-multiupload.html">
 <link rel="import" href="../bower_components/polymerfire/firebase-storage-upload-task.html">
 
 <!-- https://poly-style.appspot.com?id=github-markdown-styles&url=https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.8.0/github-markdown.min.css -->
 <link rel="import" href="my-theme.html">
-<link rel="import" href="my-ia.html">
 
 <dom-module id="my-marked">
   <template>
@@ -30,27 +28,11 @@
       }
     </style>
 
-    <!--
-    <firebase-storage-ref
-      path="/files/p-logo.png"
-      download-url="{{downloadUrl}}"></firebase-storage-ref>
-    -->
-
     <firebase-storage-multiupload
-      id="fs"
-      path="/files"
-      upload-tasks="{{uploadTasks}}"
-      files="[[files]]"></firebase-storage-multiupload>
+      path="/files" upload-tasks="{{uploadTasks}}"></firebase-storage-multiupload>
     <template is="dom-repeat" items="[[uploadTasks]]">
       <firebase-storage-upload-task
-        task="[[item]]""
-        bytes-transferred="{{item.bytesTransferred}}"
-        total-bytes="{{item.totalBytes}}"
-        state="{{item.state}}"
-        download-url="{{_downloadUrl}}"
-        metadata="{{item.metadata}}"
-        path="{{item.path}}"></firebase-storage-upload-task>
-      <img src="{{item.downloadUrl}}" style="width: 36px;">
+        task="[[item]]" download-url="{{_downloadUrl}}"></firebase-storage-upload-task>
     </template>
 
     <prism-highlighter></prism-highlighter>
@@ -68,10 +50,11 @@
     <template is="dom-if" if="[[contents]]">
       <template is="dom-if" if="[[login]]">
         <paper-toggle-button checked="{{_edit}}"></paper-toggle-button>
-        <paper-textarea value="{{contents}}" hidden="[[!_edit]]"></paper-textarea>
+        <paper-textarea value="{{contents}}" hidden="[[!_edit]]"
+                        on-drop="_onDrop" on-paste="_onPaste"></paper-textarea>
       </template>
     </template>
-      
+    
   </template>
   <script>
     class MyMarked extends Polymer.Element {
@@ -83,49 +66,30 @@
             type: String,
             notify: true
           },
-          files: {
-            type: Array,
-            notify: true,
-            value: []
-          },
           _downloadUrl:{
             type: String,
-            observer: "_insertDownloadUrl"
+            observer: "_downloadUrlChanged"
           }
         }
       }
-      static get observers() {
-        return ['editview(_edit)']
-      }
-      editview(_edit){
-        if(_edit && ! this._initEdit){
-          this._initEdit = true
-          const textarea = this.shadowRoot.querySelector('paper-textarea')
-          //inlineAttachment.editors.input.attachToInput(textarea,{uploadUrl:'imageUrl'})
-          console.log('edit')
-
-          textarea.addEventListener('drop', e=>{
-            e.stopPropagation()
-            e.preventDefault()
-            this._onDrop(e)
-          })
-        }
-      }
       _onDrop(e){
-        this.shadowRoot.querySelector('#fs').upload(e.dataTransfer.files)
+        e.stopPropagation()
+        e.preventDefault()
+        this.shadowRoot.querySelector('firebase-storage-multiupload').upload(e.dataTransfer.files)
       }
-      _upload(e) {
-        this.files = e.target.files;
-        console.log(this.files)
+      _onPaste(e){
+        if (typeof e.clipboardData === "object")
+          this.shadowRoot.querySelector('firebase-storage-multiupload').upload(
+            Array.from(e.clipboardData.items || e.clipboardData.files || []).map(i=>i.getAsFile()))
       }
-      _insertDownloadUrl(text){
-        if(text){
-          text='![img]('+text+')'
+      _downloadUrlChanged(url){
+        if(url){
           const textarea = this.shadowRoot.querySelector('paper-textarea')
-          var strPos = textarea.shadowRoot.querySelector('iron-autogrow-textarea').selectionStart
-          var front = this.contents.substring(0, strPos)
-          var back = this.contents.substring(strPos, this.contents.length)
-          this.contents = front + text + back
+          const el= textarea.shadowRoot.querySelector('iron-autogrow-textarea')
+          const pos = el.selectionStart
+          const text = "![img]("+url+")\n"
+          this.contents = this.contents.substring(0, pos) + text + this.contents.substring(pos, this.contents.length)
+          el.selectionStart = pos + text.length
         }
       }
     }
