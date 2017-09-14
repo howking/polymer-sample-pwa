@@ -31,8 +31,7 @@
     <firebase-storage-multiupload
       path="/files" upload-tasks="{{uploadTasks}}"></firebase-storage-multiupload>
     <template is="dom-repeat" items="[[uploadTasks]]">
-      <firebase-storage-upload-task
-        task="[[item]]" download-url="{{_downloadUrl}}"></firebase-storage-upload-task>
+      <firebase-storage-upload-task task="[[item]]" metadata="{{_metaData}}"></firebase-storage-upload-task>
     </template>
 
     <prism-highlighter></prism-highlighter>
@@ -79,39 +78,39 @@
             type: String,
             value: '![Uploading file...]()'
           },
-          _downloadUrl:{
-            type: String,
-            observer: "_downloadUrlChanged"
+          _metaData: {
+            type: Object,
+            observer: '_metaDataChanged'
           }
         }
       }
       _onDrop(e){
         e.stopPropagation()
         e.preventDefault()
-        this._insertImageText(this.progressText)
         this.shadowRoot.querySelector('firebase-storage-multiupload').upload(
-          Array.from(e.dataTransfer.files).filter(f=>this.allowedTypes.indexOf(f.type) !== -1))
+          Array.from(e.dataTransfer.files)
+               .filter(f=>this.allowedTypes.indexOf(f.type) !== -1)
+               .map(f=>{this._insertImageText(this.progressText); return f;}))
       }
       _onPaste(e){
-        this._insertImageText(this.progressText)
         this.shadowRoot.querySelector('firebase-storage-multiupload').upload(
           Array.from(e.clipboardData.items || e.clipboardData.files || [])
                .filter(f=>this.allowedTypes.indexOf(f.type) !== -1)
-               .map(i=>i.getAsFile()))
+               .map(i=>{this._insertImageText(this.progressText); return i.getAsFile();}))
       }
-      _downloadUrlChanged(url){
-        if(url) this._insertImageText('![img]('+url+')'+"\n")
+      _metaDataChanged(meta){
+        if(meta) this._insertImageText('!['+meta.name+']('+meta.downloadURLs[0]+')'+"\n")
       }
       _insertImageText(text){
-        const el= this.shadowRoot.querySelector('paper-textarea')
-                      .shadowRoot.querySelector('iron-autogrow-textarea')
+        const el = this.shadowRoot.querySelector('paper-textarea')
+                       .shadowRoot.querySelector('iron-autogrow-textarea')
         const pos = el.selectionStart
         const ptext = this.progressText
         let offset = 0
-        if(this.contents.substr(pos - ptext.length, ptext.length) == ptext){
+        if(this.contents.substr(pos - ptext.length, ptext.length) == ptext)
           offset = ptext.length
-        }
-        this.contents = this.contents.substring(0, pos - offset) + text + this.contents.substring(pos, this.contents.length)
+        this.contents = this.contents.substring(0, pos - offset) + text +
+                        this.contents.substring(pos, this.contents.length)
         el.selectionStart = pos + text.length - offset
         el.selectionEnd = pos + text.length - offset
         el.focus()
