@@ -66,6 +66,19 @@
             type: String,
             notify: true
           },
+          allowedTypes: {
+            type: Array,
+            value: [
+              'image/jpeg',
+              'image/png',
+              'image/jpg',
+              'image/gif'
+            ]
+          },
+          progressText: {
+            type: String,
+            value: '![Uploading file...]()'
+          },
           _downloadUrl:{
             type: String,
             observer: "_downloadUrlChanged"
@@ -75,22 +88,33 @@
       _onDrop(e){
         e.stopPropagation()
         e.preventDefault()
-        this.shadowRoot.querySelector('firebase-storage-multiupload').upload(e.dataTransfer.files)
+        this._insertImageText(this.progressText)
+        this.shadowRoot.querySelector('firebase-storage-multiupload').upload(
+          Array.from(e.dataTransfer.files).filter(f=>this.allowedTypes.indexOf(f.type) !== -1))
       }
       _onPaste(e){
-        if (typeof e.clipboardData === "object")
-          this.shadowRoot.querySelector('firebase-storage-multiupload').upload(
-            Array.from(e.clipboardData.items || e.clipboardData.files || []).map(i=>i.getAsFile()))
+        this._insertImageText(this.progressText)
+        this.shadowRoot.querySelector('firebase-storage-multiupload').upload(
+          Array.from(e.clipboardData.items || e.clipboardData.files || [])
+               .filter(f=>this.allowedTypes.indexOf(f.type) !== -1)
+               .map(i=>i.getAsFile()))
       }
       _downloadUrlChanged(url){
-        if(url){
-          const textarea = this.shadowRoot.querySelector('paper-textarea')
-          const el= textarea.shadowRoot.querySelector('iron-autogrow-textarea')
-          const pos = el.selectionStart
-          const text = "![img]("+url+")\n"
-          this.contents = this.contents.substring(0, pos) + text + this.contents.substring(pos, this.contents.length)
-          el.selectionStart = pos + text.length
+        if(url) this._insertImageText('![img]('+url+')'+"\n")
+      }
+      _insertImageText(text){
+        const el= this.shadowRoot.querySelector('paper-textarea')
+                      .shadowRoot.querySelector('iron-autogrow-textarea')
+        const pos = el.selectionStart
+        const ptext = this.progressText
+        let offset = 0
+        if(this.contents.substr(pos - ptext.length, ptext.length) == ptext){
+          offset = ptext.length
         }
+        this.contents = this.contents.substring(0, pos - offset) + text + this.contents.substring(pos, this.contents.length)
+        el.selectionStart = pos + text.length - offset
+        el.selectionEnd = pos + text.length - offset
+        el.focus()
       }
     }
     customElements.define(MyMarked.is, MyMarked)
