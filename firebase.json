@@ -2,8 +2,6 @@
   "hosting": {
     "public": "build/default",
     "rewrites": [{
-      "source": "/imageUrl", "function": "imageUrl"
-    },{
       "source": "!/__/**",
       "destination": "/index.html"
     }]
