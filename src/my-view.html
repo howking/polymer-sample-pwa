@@ -63,7 +63,7 @@
             <div main-title>My app</div>
             <paper-icon-button icon="my:delete"></paper-icon-button>
             <paper-icon-button icon="my:search"></paper-icon-button>
-            <my-fire key="[[routeData.key]]" pages="{{pages}}" view="{{view}}" login="{{login}}"></my-fire>
+            <my-fire key="[[routeData.key]]" pages="{{pages}}" login="{{login}}"></my-fire>
           </app-toolbar>
         </app-header>
 
@@ -72,7 +72,7 @@
         </template>
         
         <template is="dom-if" if="[[routeData.key]]">
-          <my-marked contents="{{view.contents}}" login="[[login]]"></my-marked>
+          <my-marked key="[[routeData.key]]" login="[[login]]"></my-marked>
         </template>
 
       </app-header-layout>

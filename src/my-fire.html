@@ -20,7 +20,6 @@
       storage-bucket="sample-3-d794e.appspot.com"
       database-url="https://sample-3-d794e.firebaseio.com"></firebase-app>
     <firebase-query path="/data" data="{{pages}}"></firebase-query>
-    <firebase-document path="/data/[[key]]" data="{{view}}"></firebase-document>
     <firebase-auth signed-in="{{login}}" provider="google"></firebase-auth>
 
     <paper-icon-button icon="my:[[_icon(login)]]" on-tap="_auth"></paper-icon-button>
@@ -31,16 +30,14 @@
       static get is() { return 'my-fire' }
       static get properties() {
         return {
-          key: {
-            type: String
-          },
+          key: String,
           pages: {
             type: Array,
             notify: true
           },
-          view: {
-            type: Object,
-            notify: true
+          contents: {
+            type: String,
+            observer: '_contentsChanged'
           },
           login: {
             type: Boolean,

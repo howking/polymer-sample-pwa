@@ -7,8 +7,10 @@
 <link rel="import" href="../bower_components/sanitize-element/sanitize-element.html">
 <link rel="import" href="../bower_components/paper-toggle-button/paper-toggle-button.html">
 <link rel="import" href="../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../bower_components/polymerfire/firebase-storage-multiupload.html">
 <link rel="import" href="../bower_components/polymerfire/firebase-storage-upload-task.html">
+<link rel="import" href="../bower_components/polymerfire/firebase-storage-ref.html">
 
 <!-- https://poly-style.appspot.com?id=github-markdown-styles&url=https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.8.0/github-markdown.min.css -->
 <link rel="import" href="my-theme.html">
@@ -34,6 +36,8 @@
       <firebase-storage-upload-task task="[[item]]" metadata="{{_metaData}}"></firebase-storage-upload-task>
     </template>
 
+    <firebase-storage-ref path="[[path]]" download-url="{{downloadUrl}}"></firebase-storage-ref>
+    
     <prism-highlighter></prism-highlighter>
 
     <sanitize-element
@@ -42,15 +46,17 @@
                "attributes":{"img":["class","src"]},
                "protocols":{"img":{"src":["https"]}}}'></sanitize-element>
     
-    <marked-element sanitize sanitizer="[[_sanitizer]]" markdown="[[contents]]">
+    <marked-element sanitize sanitizer="[[_sanitizer]]" markdown="[[contents]]" on-marked-loadend="_sync">
       <main class="markdown-body" slot="markdown-html"></main>
+      <script type="text/markdown" src$="[[downloadUrl]]"></script>
     </marked-element>
     
-    <template is="dom-if" if="[[contents]]">
+    <template is="dom-if" if="[[path]]">
       <template is="dom-if" if="[[login]]">
         <paper-toggle-button checked="{{_edit}}"></paper-toggle-button>
         <paper-textarea value="{{contents}}" hidden="[[!_edit]]"
                         on-drop="_onDrop" on-paste="_onPaste"></paper-textarea>
+        <paper-button on-tap="_save" hidden="[[!_edit]]">SAVE</paper-button>
       </template>
     </template>
     
@@ -60,11 +66,13 @@
       static get is() { return 'my-marked' }
       static get properties() {
         return {
+          key: String,
           login: Boolean,
-          contents: {
+          path: {
             type: String,
-            notify: true
+            computed: '_computedPath(key)'
           },
+          downloadUrl: String,
           allowedTypes: {
             type: Array,
             value: [
@@ -83,6 +91,15 @@
             observer: '_metaDataChanged'
           }
         }
+      }
+      _sync(){
+        this.contents=this.shadowRoot.querySelector('marked-element').markdown
+      }
+      _save(){
+        this.shadowRoot.querySelector('firebase-storage-ref').putString(this.contents)
+      }
+      _computedPath(key){
+        return key ? '/files/'+key+'.md' : null
       }
       _onDrop(e){
         e.stopPropagation()

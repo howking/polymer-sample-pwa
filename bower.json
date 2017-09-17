@@ -10,6 +10,9 @@
     "marked-element": "PolymerElements/marked-element",
     "prism-element": "PolymerElements/prism-element",
     "sanitize-element": "howking/sanitize-element",
-    "polymerfire": "firebase/polymerfire"
+    "polymerfire": "howking/polymerfire#ebe0d65e7f36ed4d2c36b7545a97958ff049eff2"
+  },
+  "resolutions": {
+    "polymerfire": "ebe0d65e7f36ed4d2c36b7545a97958ff049eff2"
   }
 }
