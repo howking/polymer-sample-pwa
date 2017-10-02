@@ -1,0 +1,79 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/polymer/lib/mixins/gesture-event-listeners.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../bower_components/neon-animation/web-animations.html">
+<link rel="import" href="../bower_components/neon-animation/neon-animations.html">
+
+<dom-module id="my-info">
+  <template>
+    <style>
+      paper-dialog {
+        position: fixed;
+        top: 0px;
+        right: 0px;
+        width: 400px;
+        overflow: auto;
+      }
+      paper-dialog p {
+        height: 60vh;
+      }
+    </style>
+    <paper-dialog id="modal" on-track="_handleTrack"
+                  entry-animation="slide-from-bottom-animation" exit-animation="fade-out-animation"
+                  always-on-top no-cancel-on-outside-click>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+      <div class="buttons">
+        <paper-button dialog-confirm autofocus>Tap me to close</paper-button>
+      </div>
+    </paper-dialog>
+  </template>
+  <script>
+    class MyInfo extends Polymer.GestureEventListeners(Polymer.Element) {
+      static get is() { return 'my-info' }
+      static get properties() {
+        return {
+          open: {
+            type: Boolean,
+            observer: "_openModal"
+          },
+          _tiX: {
+            type: Number,
+            value: 0
+          },
+          _tiY: {
+            type: Number,
+            value: 0
+          }
+        }
+      }
+      _openModal(v,ov) {
+        if(ov !== undefined)
+          this.$.modal.open();
+      }
+      _handleTrack(e) {
+        e.stopPropagation();
+        e.preventDefault();
+        const t = e.target;
+        console.log(e);
+        t.style.transitionProperty='width,height'
+        switch(e.detail.state) {
+          case 'start':
+            console.log('style',t.style.left,t.style.top);
+            console.log('offset',t.offsetLeft,t.offsetTop);
+            this._tiX = t.offsetLeft - 40;
+            this._tiY = t.offsetTop - 23;
+            console.log('tiXY',t.tiX,t.tiY);
+            break;
+          case 'track':
+            console.log('x',e.detail.x,e.detail.y)
+            console.log('dx',e.detail.dx,e.detail.dy)
+            t.style.left = (e.detail.dx + this._tiX) + 'px';
+            t.style.top  = (e.detail.dy + this._tiY) + 'px';
+            break;
+        }
+      }
+    }
+    customElements.define(MyInfo.is, MyInfo)
+  </script>
+</dom-module>

@@ -12,6 +12,7 @@
 <link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
 <link rel="import" href="../bower_components/paper-item/paper-item.html">
 <link rel="import" href="my-home.html">
+<link rel="import" href="my-info.html">
 <link rel="import" href="my-icons.html">
 <link rel="import" href="my-fire.html">
 <link rel="import" href="my-marked.html" async>
@@ -63,6 +64,7 @@
             <div main-title>My app</div>
             <paper-icon-button icon="my:delete"></paper-icon-button>
             <paper-icon-button icon="my:search"></paper-icon-button>
+            <paper-icon-button icon="my:info" toggles active="{{_openInfo}}"></paper-icon-button>
             <my-fire key="[[routeData.key]]" pages="{{pages}}" view="{{view}}" login="{{login}}"></my-fire>
           </app-toolbar>
         </app-header>
@@ -73,11 +75,15 @@
         
         <template is="dom-if" if="[[routeData.key]]">
           <my-marked contents="{{view.contents}}" login="[[login]]"></my-marked>
-        </template>
 
+        </template>
+        
       </app-header-layout>
-      
+
     </app-drawer-layout>
+
+    <my-info open="[[_openInfo]]"></my-info>
+
   </template>
   
   <script>
